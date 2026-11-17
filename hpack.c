@@ -29,44 +29,42 @@
 #define HPACK_INTERNAL
 #include "hpack.h"
 
-static const struct hpack_index *
-		 hpack_table_getbyid(long, struct hpack_index *,
-		    struct hpack_table *);
-static const struct hpack_index *
-		 hpack_table_getbyheader(struct hpack_header *,
-		    struct hpack_index *, struct hpack_table *);
-static int	 hpack_table_add(struct hpack_header *,
-		    struct hpack_table *);
-static int	 hpack_table_evict(long, long, struct hpack_table *);
-static int	 hpack_table_setsize(long, struct hpack_table *);
+static const struct hpack_index	*hpack_table_getbyid(long, struct hpack_index *,
+    struct hpack_table *);
+static const struct hpack_index	*hpack_table_getbyheader(struct hpack_header *,
+    struct hpack_index *, struct hpack_table *);
+static int			 hpack_table_add(struct hpack_header *,
+    struct hpack_table *);
+static int			 hpack_table_evict(long, long,
+    struct hpack_table *);
+static int			 hpack_table_setsize(long,
+    struct hpack_table *);
 
 static long	 hpack_decode_int(struct hbuf *, unsigned char);
 static char	*hpack_decode_str(struct hbuf *, unsigned char);
 static int	 hpack_decode_buf(struct hbuf *, struct hpack_table *);
 static long	 hpack_decode_index(struct hbuf *, unsigned char,
-		    const struct hpack_index **, struct hpack_table *);
+    const struct hpack_index **, struct hpack_table *);
 static int	 hpack_decode_literal(struct hbuf *, unsigned char,
-		    struct hpack_table *);
+    struct hpack_table *);
 static int	 hpack_encode_int(struct hbuf *, long, unsigned char,
-		    unsigned char);
+    unsigned char);
 static int	 hpack_encode_str(struct hbuf *, char *);
 
-static int	 hpack_huffman_init(void);
-static struct hpack_huffman_node *
-		 hpack_huffman_new(void);
-static void	 hpack_huffman_free(struct hpack_huffman_node *);
+static int				 hpack_huffman_init(void);
+static struct hpack_huffman_node	*hpack_huffman_new(void);
+static void				 hpack_huffman_free(
+    struct hpack_huffman_node *);
 
-static struct hbuf *
-		 hbuf_new(unsigned char *, size_t);
-static void	 hbuf_free(struct hbuf *);
-static int	 hbuf_writechar(struct hbuf *, unsigned char);
-static int	 hbuf_writebuf(struct hbuf *, unsigned char *, size_t);
-static unsigned char *
-		 hbuf_release(struct hbuf *, size_t *);
-static int	 hbuf_readchar(struct hbuf *, unsigned char *);
-static int	 hbuf_readbuf(struct hbuf *, unsigned char **, size_t);
-static int	 hbuf_advance(struct hbuf *, size_t);
-static size_t	 hbuf_left(struct hbuf *);
+static struct hbuf	*hbuf_new(unsigned char *, size_t);
+static void		 hbuf_free(struct hbuf *);
+static int		 hbuf_writechar(struct hbuf *, unsigned char);
+static int		 hbuf_writebuf(struct hbuf *, unsigned char *, size_t);
+static unsigned char	*hbuf_release(struct hbuf *, size_t *);
+static int		 hbuf_readchar(struct hbuf *, unsigned char *);
+static int		 hbuf_readbuf(struct hbuf *, unsigned char **, size_t);
+static int		 hbuf_advance(struct hbuf *, size_t);
+static size_t		 hbuf_left(struct hbuf *);
 
 static struct hpack	 hpack_global;
 
